@@ -1,0 +1,315 @@
+<!-- src/app/components/dashboard/dashboard.component.html - FEATURE 3: View Toggle -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-lg border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-4">
+          <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg"></div>
+          <h1 class="text-xl font-bold text-gray-900">Client Portal</h1>
+        </div>
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-indigo-600 rounded-full flex items-center justify-center">
+              <span class="text-white text-sm font-semibold">NK</span>
+            </div>
+            <span class="text-sm font-medium text-gray-700">{{ clientName }}</span>
+          </div>
+          <button
+            (click)="logout()"
+            class="text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 mb-8 text-white">
+      <h1 class="text-3xl font-bold mb-2">Welcome back, {{ clientName }}!</h1>
+      <p class="text-indigo-100">Here's an overview of your current projects and recent activity.</p>
+    </div>
+
+    <!-- NEW: View Toggle Section -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-900">Your Projects</h2>
+
+      <!-- View Mode Toggle -->
+      <div class="flex items-center space-x-3">
+        <span class="text-sm font-medium text-gray-700">View:</span>
+        <div class="bg-gray-100 rounded-lg p-1 flex">
+          <button
+            (click)="toggleViewMode()"
+            [class]="viewMode === 'cards' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'"
+            class="px-3 py-1 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-1"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            <span>Cards</span>
+          </button>
+          <button
+            (click)="toggleViewMode()"
+            [class]="viewMode === 'table' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'"
+            class="px-3 py-1 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-1"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+            </svg>
+            <span>Table</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards View -->
+    <div *ngIf="viewMode === 'cards'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div *ngFor="let project of projects"
+           class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+        <!-- Project Header -->
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">{{ project.name }}</h3>
+          <span
+            class="text-sm font-medium px-3 py-1 rounded-full"
+            [class]="getStatusColor(project.status)"
+          >
+            {{ getStatusText(project.status) }}
+          </span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-4">
+          <div class="flex justify-between text-sm text-gray-600 mb-2">
+            <span>Progress</span>
+            <span>{{ project.progress }}%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+              [style.width.%]="project.progress"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Project Description -->
+        <p class="text-sm text-gray-600 mb-4">{{ project.description }}</p>
+
+        <!-- Project Dates -->
+        <div class="grid grid-cols-2 gap-4 mb-4 text-xs">
+          <div>
+            <span class="text-gray-500">Started:</span>
+            <div class="font-medium text-gray-900">{{ project.startDate | date:'MMM d, y' }}</div>
+          </div>
+          <div>
+            <span class="text-gray-500">Due:</span>
+            <div class="font-medium text-gray-900">{{ project.expectedDelivery | date:'MMM d, y' }}</div>
+          </div>
+        </div>
+
+        <!-- Client Note -->
+        <div *ngIf="project.clientNote" class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+          <p class="text-xs text-amber-800">{{ project.clientNote }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex space-x-2">
+          <button
+            (click)="downloadLatest(project)"
+            class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded-lg transition-colors text-sm"
+            [disabled]="project.status === 'paused'"
+            [class.opacity-50]="project.status === 'paused'"
+          >
+            <ng-container *ngIf="project.status !== 'paused'; else pausedText">
+              Download Latest
+            </ng-container>
+            <ng-template #pausedText>
+              Project Paused
+            </ng-template>
+          </button>
+
+          <button
+            (click)="navigateToProjectHistory(project.id)"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 rounded-lg transition-colors text-sm flex items-center"
+            title="View project history"
+          >
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW: Table View -->
+    <div *ngIf="viewMode === 'table'" class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Projects Overview</h3>
+      </div>
+
+      <!-- Desktop Table -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let project of projects" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">{{ project.name }}</div>
+                  <div class="text-sm text-gray-500">{{ project.description }}</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                  [class]="getStatusColor(project.status)"
+                >
+                  {{ getStatusText(project.status) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-full bg-gray-200 rounded-full h-2 mr-2" style="width: 100px;">
+                    <div
+                      class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full"
+                      [style.width.%]="project.progress"
+                    ></div>
+                  </div>
+                  <span class="text-sm text-gray-600">{{ project.progress }}%</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ project.expectedDelivery | date:'MMM d, y' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                <button
+                  (click)="downloadLatest(project)"
+                  class="text-indigo-600 hover:text-indigo-900 transition-colors"
+                  [disabled]="project.status === 'paused'"
+                  [class.opacity-50]="project.status === 'paused'"
+                >
+                  Download
+                </button>
+                <button
+                  (click)="navigateToProjectHistory(project.id)"
+                  class="text-purple-600 hover:text-purple-900 transition-colors"
+                >
+                  History
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Table Cards -->
+      <div class="md:hidden">
+        <div *ngFor="let project of projects" class="border-b border-gray-200 last:border-b-0">
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1">
+                <h4 class="text-sm font-medium text-gray-900 mb-1">{{ project.name }}</h4>
+                <p class="text-sm text-gray-500 mb-2">{{ project.description }}</p>
+                <p class="text-xs text-gray-400">Due: {{ project.expectedDelivery | date:'MMM d, y' }}</p>
+              </div>
+              <span
+                class="px-2 py-1 text-xs font-medium rounded-full ml-4"
+                [class]="getStatusColor(project.status)"
+              >
+                {{ getStatusText(project.status) }}
+              </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-3">
+              <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Progress</span>
+                <span>{{ project.progress }}%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full"
+                  [style.width.%]="project.progress"
+                ></div>
+              </div>
+            </div>
+
+            <div class="flex space-x-2">
+              <button
+                (click)="downloadLatest(project)"
+                class="flex-1 text-indigo-600 hover:text-indigo-900 transition-colors text-sm font-medium"
+                [disabled]="project.status === 'paused'"
+                [class.opacity-50]="project.status === 'paused'"
+              >
+                Download
+              </button>
+              <button
+                (click)="navigateToProjectHistory(project.id)"
+                class="flex-1 text-purple-600 hover:text-purple-900 transition-colors text-sm font-medium"
+              >
+                History
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h2>
+      <div class="space-y-4">
+        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-indigo-600 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-900">New design concepts uploaded for Brand Identity project</p>
+            <p class="text-xs text-gray-500">2 hours ago</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-900">Website wireframes approved and moved to development</p>
+            <p class="text-xs text-gray-500">1 day ago</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-900">Initial consultation call scheduled for next week</p>
+            <p class="text-xs text-gray-500">3 days ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
