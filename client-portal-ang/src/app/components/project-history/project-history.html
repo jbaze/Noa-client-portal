@@ -1,27 +1,44 @@
-<div class="min-h-screen bg-gray-50">
+<!-- src/app/components/project-history/project-history.component.html - DARK MODE VERSION -->
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
   <!-- Header -->
-  <header class="bg-white shadow-sm border-b">
+  <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center">
           <button
             (click)="goBack()"
-            class="mr-4 p-2 text-gray-500 hover:text-gray-700 transition-colors"
+            class="mr-4 p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
           </button>
           <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg mr-3"></div>
-          <h1 class="text-xl font-semibold text-gray-900">
+          <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
             {{ selectedProjectId ? selectedProjectName + ' History' : 'Project History' }}
           </h1>
         </div>
         <div class="flex items-center space-x-4">
-          <span class="text-sm text-gray-600">{{ clientName }}</span>
+          <!-- Theme Toggle -->
+          <button
+            (click)="toggleTheme()"
+            class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+            [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <!-- Sun icon for light mode -->
+            <svg *ngIf="!isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <!-- Moon icon for dark mode -->
+            <svg *ngIf="isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <span class="text-sm text-gray-600 dark:text-gray-300">{{ clientName }}</span>
           <button
             (click)="logout()"
-            class="text-gray-500 hover:text-gray-700 transition-colors"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -36,23 +53,23 @@
   <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <!-- Page Header -->
     <div class="mb-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-2">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
         {{ selectedProjectId ? selectedProjectName + ' Deliveries' : 'All Delivery History' }}
       </h2>
-      <p class="text-gray-600 text-lg">
+      <p class="text-gray-600 dark:text-gray-400 text-lg">
         {{ selectedProjectId ? 'Deliveries for ' + selectedProjectName : 'All your project deliveries and their current status' }}
       </p>
     </div>
 
     <!-- Project Filter Info -->
-    <div *ngIf="selectedProjectId" class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-8">
+    <div *ngIf="selectedProjectId" class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 mb-8">
       <div class="flex items-start">
-        <svg class="w-5 h-5 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
         </svg>
         <div>
-          <h4 class="text-sm font-medium text-indigo-800 mb-1">Filtered View</h4>
-          <p class="text-indigo-700 text-sm">
+          <h4 class="text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1">Filtered View</h4>
+          <p class="text-indigo-700 dark:text-indigo-300 text-sm">
             Showing {{ deliveries.length }} deliveries for {{ selectedProjectName }}.
             <button (click)="goBack()" class="underline hover:no-underline ml-1">
               Return to dashboard
@@ -63,63 +80,63 @@
     </div>
 
     <!-- Status Note (only show if viewing all projects) -->
-    <div *ngIf="!selectedProjectId" class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+    <div *ngIf="!selectedProjectId" class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-8">
       <div class="flex items-start">
-        <svg class="w-5 h-5 text-amber-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
         </svg>
         <div>
-          <h4 class="text-sm font-medium text-amber-800 mb-1">Waiting for your feedback...</h4>
-          <p class="text-amber-700 text-sm">We've delivered the latest logo refinements and are waiting for your approval to proceed with the next phase.</p>
+          <h4 class="text-sm font-medium text-amber-800 dark:text-amber-200 mb-1">Waiting for your feedback...</h4>
+          <p class="text-amber-700 dark:text-amber-300 text-sm">We've delivered the latest logo refinements and are waiting for your approval to proceed with the next phase.</p>
         </div>
       </div>
     </div>
 
     <!-- Deliveries Table -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-900">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-transparent dark:border-gray-700">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ selectedProjectId ? selectedProjectName + ' Deliveries' : 'All Deliveries' }}
         </h3>
       </div>
 
       <!-- Desktop Table -->
       <div class="hidden md:block overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Delivery Name
               </th>
-              <th *ngIf="!selectedProjectId" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th *ngIf="!selectedProjectId" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Project
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Date
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Status
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 File Info
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let delivery of deliveries" class="hover:bg-gray-50 transition-colors">
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let delivery of deliveries" class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div>
-                  <div class="text-sm font-medium text-gray-900">{{ delivery.name }}</div>
-                  <div class="text-sm text-gray-500">{{ delivery.description }}</div>
+                  <div class="text-sm font-medium text-gray-900 dark:text-white">{{ delivery.name }}</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400">{{ delivery.description }}</div>
                 </div>
               </td>
-              <td *ngIf="!selectedProjectId" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td *ngIf="!selectedProjectId" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">
                 {{ getProjectName(delivery.projectId) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">
                 {{ delivery.deliveryDate | date:'mediumDate' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
@@ -130,13 +147,13 @@
                   {{ getStatusText(delivery.status) }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                 <div>{{ delivery.fileType }} • {{ delivery.fileSize }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
                   (click)="downloadFile(delivery)"
-                  class="text-blue-600 hover:text-blue-900 transition-colors flex items-center"
+                  class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors flex items-center"
                 >
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -151,14 +168,14 @@
 
       <!-- Mobile Cards -->
       <div class="md:hidden">
-        <div *ngFor="let delivery of deliveries" class="border-b border-gray-200 last:border-b-0">
+        <div *ngFor="let delivery of deliveries" class="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
           <div class="p-6">
             <div class="flex justify-between items-start mb-3">
               <div class="flex-1">
-                <h4 class="text-sm font-medium text-gray-900 mb-1">{{ delivery.name }}</h4>
-                <p class="text-sm text-gray-500 mb-2">{{ delivery.description }}</p>
-                <p *ngIf="!selectedProjectId" class="text-xs text-gray-400 mb-1">{{ getProjectName(delivery.projectId) }}</p>
-                <p class="text-xs text-gray-400">{{ delivery.deliveryDate | date:'mediumDate' }}</p>
+                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-1">{{ delivery.name }}</h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ delivery.description }}</p>
+                <p *ngIf="!selectedProjectId" class="text-xs text-gray-400 dark:text-gray-500 mb-1">{{ getProjectName(delivery.projectId) }}</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">{{ delivery.deliveryDate | date:'mediumDate' }}</p>
               </div>
               <span
                 class="px-2 py-1 text-xs font-medium rounded-full ml-4"
@@ -169,10 +186,10 @@
             </div>
 
             <div class="flex justify-between items-center">
-              <span class="text-sm text-gray-500">{{ delivery.fileType }} • {{ delivery.fileSize }}</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{{ delivery.fileType }} • {{ delivery.fileSize }}</span>
               <button
                 (click)="downloadFile(delivery)"
-                class="text-blue-600 hover:text-blue-900 transition-colors flex items-center text-sm font-medium"
+                class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors flex items-center text-sm font-medium"
               >
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>

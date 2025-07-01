@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../../services/project';
 import { AuthService } from '../../services/auth';
+import { DashboardStatsService, DashboardStats } from '../../services/dashboard-stats';
+import { ThemeService } from '../../services/theme';
 import { Project } from '../../models/project.model';
 
 @Component({
@@ -15,17 +17,28 @@ import { Project } from '../../models/project.model';
 export class DashboardComponent implements OnInit {
   projects: Project[] = [];
   clientName = 'Noa Krakovich';
-  viewMode: 'cards' | 'table' = 'cards'; // NEW: View mode toggle
+  viewMode: 'cards' | 'table' = 'cards';
+  dashboardStats: DashboardStats | null = null;
 
   constructor(
     private projectService: ProjectService,
     private authService: AuthService,
+    private themeService: ThemeService,
+    private dashboardStatsService: DashboardStatsService,
     private router: Router
   ) {}
+
+   get isDarkMode() {
+    return this.themeService.isDarkMode;
+  }
 
   ngOnInit() {
     this.projectService.getAllProjects().subscribe(projects => {
       this.projects = projects;
+    });
+
+    this.dashboardStatsService.getDashboardStats().subscribe(stats => {
+      this.dashboardStats = stats;
     });
   }
 
@@ -50,6 +63,23 @@ export class DashboardComponent implements OnInit {
   // NEW METHOD: Toggle between card and table view
   toggleViewMode() {
     this.viewMode = this.viewMode === 'cards' ? 'table' : 'cards';
+  }
+
+   toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
+
+  getProgressPercentage(value: number, total: number): number {
+    return Math.round((value / total) * 100);
   }
 
   getStatusColor(status: string): string {

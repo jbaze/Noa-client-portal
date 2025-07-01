@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ProjectService } from '../../services/project';
 import { AuthService } from '../../services/auth';
+import { ThemeService } from '../../services/theme';
 import { Delivery } from '../../models/delivery.model';
 import { Project } from '../../models/project.model';
 
@@ -24,9 +25,18 @@ export class ProjectHistoryComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private authService: AuthService,
+    private themeService: ThemeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
+
+  get isDarkMode() {
+    return this.themeService.isDarkMode;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
 
   ngOnInit() {
     // Load all projects first
@@ -49,7 +59,7 @@ export class ProjectHistoryComponent implements OnInit {
   filterDeliveries() {
     if (this.selectedProjectId) {
       // Filter deliveries for specific project
-      this.deliveries = this.allDeliveries.filter(d => d.projectId === this.selectedProjectId);
+      this.deliveries = this.shuffleArray(this.allDeliveries);//this.allDeliveries.filter(d => d.projectId === this.selectedProjectId);
 
       // Get project name
       const project = this.projects.find(p => p.id === this.selectedProjectId);
@@ -59,6 +69,15 @@ export class ProjectHistoryComponent implements OnInit {
       this.deliveries = this.allDeliveries;
       this.selectedProjectName = '';
     }
+  }
+
+  shuffleArray<T>(array: T[]): T[] {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
   }
 
   getProjectName(projectId: string): string {
